@@ -3,6 +3,7 @@
 
 #include <array>
 #include <string_view>
+#include <vector>
 
 namespace CgCore {
 	enum Suit {
@@ -53,7 +54,11 @@ namespace CgCore {
 
 	class Deck {
 	public:
-		Deck()
+		Deck();
+
+		void shuffle();
+		Card deal();
+		void returnToDeck(std::vector<Card> cardsToReturn);
 	private:
 		std::array<Card, deckSize> m_cards{};
 	};
