@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "../headers/CgCore.h"
 #include "../headers/Rand.h"
 //MEMBER FUNCTIONS of CgCore::Card
@@ -5,6 +7,11 @@ CgCore::Card::Card(CgCore::Suit suit, CgCore::Face face)
 	: m_suit{suit}
 	, m_face{face}
 {}
+
+void CgCore::Card::printCard()
+{
+	std::cout << "The " << CgCore::faceSV[m_face] << " of " << CgCore::suitSV[m_suit] << ".\n";
+}
 
 
 //MEMBER FUNCTIONS of CgCore::Deck
@@ -47,4 +54,12 @@ void CgCore::Deck::returnToDeck(std::vector<CgCore::Card> cardsToReturn)
 		m_cards.push_back(c);
 	}
 	shuffle();
+}
+
+void CgCore::Deck::printDeck()
+{
+	std::cout << "The cards in this deck, in order, are: \n";
+	for (auto& c : m_cards) {
+		c.printCard();
+	}
 }

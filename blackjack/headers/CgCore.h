@@ -60,6 +60,8 @@ namespace CgCore {
 
 		Suit suit() { return m_suit; }
 		Face face() { return m_face; }
+
+		void printCard();
 	private:
 		Suit m_suit{};
 		Face m_face{};
@@ -72,6 +74,8 @@ namespace CgCore {
 		void shuffle();
 		Card deal();
 		void returnToDeck(std::vector<Card> cardsToReturn);
+
+		void printDeck();
 	private:
 		std::vector<Card> m_cards{};
 	};
