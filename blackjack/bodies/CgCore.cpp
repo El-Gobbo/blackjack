@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 
 #include "../headers/CgCore.h"
 #include "../headers/Rand.h"
@@ -23,20 +24,13 @@ CgCore::Deck::Deck()
 			m_cards.push_back(Card{ s, f });
 		}
 	}
+	shuffle();
 }
 
 //fisher-yates shuffle algorithm
 void CgCore::Deck::shuffle()
 {
-	//Initialise I to the final index in the m_cards vector
-	for (int i{ static_cast<int>(std::size(m_cards)) - 1}; i > 0; --i) {
-		int toSwap{ Random::get(0,i) };
-		if (!(toSwap == i)) {
-			Card copyOfI{ m_cards[i] };
-			m_cards[i] = m_cards[toSwap];
-			m_cards[toSwap] = copyOfI;
-		}
-	}
+	std::shuffle(m_cards.begin(), m_cards.end(), Random::mt);
 }
 
 // Deal out individual cards from the top of the deck
