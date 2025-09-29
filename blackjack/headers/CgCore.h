@@ -56,12 +56,13 @@ namespace CgCore {
 
 	class Card {
 	public:
+		Card() = default;
 		Card(Suit suit, Face face);
 
 		Suit suit() { return m_suit; }
 		Face face() { return m_face; }
 
-		void printCard();
+		void printCard() const;
 	private:
 		Suit m_suit{};
 		Face m_face{};

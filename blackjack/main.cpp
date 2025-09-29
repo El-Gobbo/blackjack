@@ -1,10 +1,10 @@
 #include <iostream>
 
 #include "headers/CgCore.h"
+#include "headers/Blackjack.h"
 
 int main()
 {
-	CgCore::Deck newDeck{};
-	newDeck.printDeck();
+	Blackjack::playRound();
 	return 0;
 }

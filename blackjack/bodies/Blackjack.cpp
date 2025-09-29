@@ -19,39 +19,68 @@ std::vector<CgCore::Card> Blackjack::Hand::discardHand()
 	return copyOfHand;
 }
 
-bool Blackjack::Hand::isBust()
+void Blackjack::Hand::updateScore()
 {
-	int score{ 0 };
-	for (auto& c : m_cards) {
-		score += cardScores[c.face()];
+	m_score += cardScores[m_cards.back().face()];
+	if (m_score > scoreToWin && m_acesCount > 0) {
+		m_score -= subtractScorePerAce;
+		--m_acesCount;
 	}
-	if (score > scoreToWin) {
-		m_isBust = true;
-	}
-	else {
-		m_isBust = false;
-	}
-	return m_isBust;
 }
 
-int Blackjack::Hand::calculateScore()
+// Draw 1 card from the relevant deck
+void Blackjack::Hand::drawFrom(CgCore::Deck& deck)
 {
-	//Check to see if there are any aces in the hand
-	bool acesInHand{ false };
-	for (auto& c : m_cards) {
-		if (c.face() == CgCore::ace) {
-			acesInHand = { true };
-		}
-	}
-	//We are using a vector to account for the fact that each ace can have two different values
-	//If I'm using a vector  from the start, do I need to check for aces in advance?
-	std::vector<int> score{ 0 };
-	if (!acesInHand) {
-		for (auto& c : m_cards) {
-			score[0] += cardScores[c.face()];
-		}
-	}
-	else {
+	// Push the card removed from the deck m_cards
+	m_cards.push_back(deck.deal());
+	// If the card is an ace, increment the aces counter
+	if (m_cards.back().face() == CgCore::ace)
+		++m_acesCount;
+	updateScore();
+}
 
+void Blackjack::Hand::printHand() const
+{
+	std::cout << m_playerName << "'s hand contains: ";
+	bool semicolon{ false };
+	for (const auto& c : m_cards) {
+		if (semicolon)
+			std::cout << "; ";
+		c.printCard();
+	}
+	std::cout << ".\n";
+}
+
+/* 
+Main game logic below!
+*/
+
+void Blackjack::playRound()
+{
+	CgCore::Deck deck{};
+
+	Hand dealer{ "The Dealer" };
+	std::cout << "Enter Your name: ";
+	std::string playerName{};
+	// TODO: add checking for input errors here
+	std::cin >> playerName;
+	Hand player1{ playerName };
+
+	// draw Initial cards
+	dealer.drawFrom(deck);
+	player1.drawFrom(deck);
+	player1.drawFrom(deck);
+
+	while (player1.score() <= scoreToWin && !player1.isStanding()) {
+		dealer.printHand();
+		player1.printHand();
+		std::cout << "Hit(0) or stand(1)? ";
+		//TODO: definitely needs input control, and tbh some way of inputting hit or stand that's better than this.
+		bool stand{};
+		std::cin >> stand;
+		if (!stand) {
+			player1.drawFrom(deck);
+			player1.updateScore();
+		}
 	}
 }

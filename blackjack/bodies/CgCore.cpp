@@ -8,19 +8,19 @@ CgCore::Card::Card(CgCore::Suit suit, CgCore::Face face)
 	, m_face{face}
 {}
 
-void CgCore::Card::printCard()
+void CgCore::Card::printCard() const
 {
-	std::cout << "The " << CgCore::faceSV[m_face] << " of " << CgCore::suitSV[m_suit] << ".\n";
+	std::cout << "the " << faceSV[m_face] << " of " << suitSV[m_suit];
 }
 
 
 //MEMBER FUNCTIONS of CgCore::Deck
 CgCore::Deck::Deck()
 {
-	m_cards.reserve(static_cast<std::size_t>(deckSize));
-	for (auto& s : suits) {
-		for (auto& f : faces) {
-			m_cards.push_back({ s, f });
+	m_cards.reserve(deckSize);
+	for (Suit s : suits) {
+		for (Face f : faces) {
+			m_cards.push_back(Card{ s, f });
 		}
 	}
 }
@@ -61,5 +61,6 @@ void CgCore::Deck::printDeck()
 	std::cout << "The cards in this deck, in order, are: \n";
 	for (auto& c : m_cards) {
 		c.printCard();
+		std::cout<<".\n";
 	}
 }
