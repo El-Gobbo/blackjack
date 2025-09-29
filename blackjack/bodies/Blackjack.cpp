@@ -47,13 +47,27 @@ void Blackjack::Hand::printHand() const
 		if (semicolon)
 			std::cout << "; ";
 		c.printCard();
+		semicolon = true;
 	}
-	std::cout << ".\n";
+	std::cout<<". Their score is " <<m_score<<  ".\n";
 }
 
 /* 
 Main game logic below!
 */
+
+void Blackjack::aiTurn(Blackjack::Hand& ai, CgCore::Deck& deck)
+{
+	while (ai.score() < scoreToWin && !ai.isStanding()) {
+		if (ai.score() < Blackjack::aiTarget) {
+			ai.drawFrom(deck);
+			ai.updateScore();
+		}
+		else {
+			ai.setIsStanding(true);
+		}
+	}
+}
 
 void Blackjack::playRound()
 {
@@ -71,7 +85,7 @@ void Blackjack::playRound()
 	player1.drawFrom(deck);
 	player1.drawFrom(deck);
 
-	while (player1.score() <= scoreToWin && !player1.isStanding()) {
+	while (player1.score() < scoreToWin && !player1.isStanding()) {
 		dealer.printHand();
 		player1.printHand();
 		std::cout << "Hit(0) or stand(1)? ";
@@ -82,5 +96,28 @@ void Blackjack::playRound()
 			player1.drawFrom(deck);
 			player1.updateScore();
 		}
+		else {
+			player1.setIsStanding(stand);
+		}
 	}
+//TODO: don't run the AI's turn if the player went bust anyway
+	aiTurn(dealer, deck);
+
+	if (player1.score() > scoreToWin) {
+		std::cout << "You went bust! You lose!";
+	}
+	else if (dealer.score() > scoreToWin) {
+		std::cout << "The dealer went bust! You win!";
+	}
+	else if (player1.score() > dealer.score()) {
+		std::cout << "You beat the dealer! You win!";
+	}
+	else if (player1.score() < dealer.score()) {
+		std::cout << "The dealer beat you! You lose!";
+	}
+	else {
+		std::cout << "You matched the dealer! No-one wins...";
+	}
+
+
 }

@@ -5,7 +5,6 @@
 
 int main()
 {
-	CgCore::Deck newDeck{};
-	newDeck.printDeck();
+	Blackjack::playRound();
 	return 0;
 }

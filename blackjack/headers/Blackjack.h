@@ -11,6 +11,8 @@
 namespace Blackjack {
 	constexpr int scoreToWin{ 21 };
 
+	constexpr int aiTarget{ 17 };
+
 	constexpr int subtractScorePerAce{ 10 };
 	constexpr int averageCardsAtEndOfGame{ 3 };
 
@@ -27,6 +29,9 @@ namespace Blackjack {
 		const std::vector<CgCore::Card>& cards() const { return m_cards; }
 		const int score() const { return m_score; }
 		bool isStanding() const { return m_isStanding; }
+
+		//Setters
+		void setIsStanding(bool isStanding) { m_isStanding = isStanding; }
 
 		//Other Functions
 		// Gets rid of all cards in hand for the next round
@@ -47,6 +52,7 @@ namespace Blackjack {
 	};
 
 	// Game logic
+	void aiTurn(Hand& ai, CgCore::Deck& deck);
 	void playRound();
 }
 
